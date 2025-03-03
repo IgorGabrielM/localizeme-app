@@ -1,0 +1,7 @@
+{
+  "name": "localizeme-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
