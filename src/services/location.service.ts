@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class LocationService {
-  private baseUrl: string = 'http://192.168.0.9:3000/location';
+  private baseUrl: string = '';
 
   constructor(private http: HttpClient) {}
 

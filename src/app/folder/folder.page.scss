@@ -1,6 +1,6 @@
 .container {
   width: 100vw;
-  height: 100vh;
+  height: 85vh;
   background-color: #343434;
 
 
@@ -10,9 +10,6 @@
   width: 90vw;
   height: 50vh;
   margin: 20px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   #map {
     width: 100%;

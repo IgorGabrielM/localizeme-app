@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import {AlertController} from "@ionic/angular";
 
 @Component({
   selector: 'app-root',
@@ -14,40 +13,20 @@ export class AppComponent implements OnInit {
     { title: 'Home', url: '/folder', icon: 'home' },
     { title: 'Friends', url: '/friends', icon: 'people' },
   ];
-
-  constructor(
-    private alertController: AlertController
-  ) {}
+  constructor() {}
 
   ngOnInit() {
-    this.presentAlert();
+    this.checkAndGenerateUUID();
   }
 
-  async presentAlert() {
+  checkAndGenerateUUID() {
     let uuid = localStorage.getItem('user-uuid');
     if (!uuid) {
-      const alert = await this.alertController.create({
-        header: 'A Short Title Is Best',
-        subHeader: 'A Sub Header Is Optional',
-        message: 'A message should be a short, complete sentence.',
-        inputs: [
-          {
-            placeholder: 'Username',
-            name: 'username'
-          }
-        ],
-        buttons: [
-          {
-            text: 'Action',
-            handler: (data) => {
-              uuid = uuidv4();
-              localStorage.setItem('user-uuid', uuid);
-              localStorage.setItem('user-name', data.username);
-            }
-          }
-        ],
-      });
-      await alert.present();
+      uuid = uuidv4();
+      localStorage.setItem('user-uuid', uuid);
+      console.log('Novo UUID gerado e armazenado:', uuid);
+    } else {
+      console.log('UUID já existente no localStorage:', uuid);
     }
   }
 }
