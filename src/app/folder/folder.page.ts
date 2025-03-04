@@ -1,6 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Geolocation } from '@capacitor/geolocation';
 import * as leaflet from 'leaflet';
+import { LocationService } from "../../services/location.service";
 
 @Component({
   selector: 'app-folder',
@@ -9,41 +10,37 @@ import * as leaflet from 'leaflet';
   standalone: false,
 })
 export class FolderPage implements OnInit, OnDestroy {
-  mapActivate = false;
+  mapActivate = true;
   map: any;
-  latitude: number = 51.505;
-  longitude: number = -0.09;
   marker: any;
   watchId: any;
+  friendMarkers: any[] = [];
 
-  constructor() {}
+  constructor(private locationService: LocationService) {}
 
   ngOnInit() {
     Geolocation.checkPermissions().then((res) => {
-      if (res.location === 'granted' && res.coarseLocation === 'granted'){
+      if (res.location === 'granted' && res.coarseLocation === 'granted') {
         this.startWatchingPosition();
-
-        setTimeout(() => {
-          this.initMap(this.latitude, this.longitude);
-        }, 1000)
       } else {
         Geolocation.requestPermissions().then(() => {
           this.startWatchingPosition();
-        })
+        });
       }
-    })
+    });
+    setInterval(() => {
+      this.loadFriendsLocation();
+    }, 5000)
   }
 
   ngOnDestroy() {
-    if (this.watchId) {
-      this.stopWatchingPosition();
-    }
+    this.stopWatchingPosition();
   }
 
   initMap(lat, long) {
     this.map = leaflet.map('map', {
       center: [lat, long],
-      zoom: 15,
+      zoom: 1.5,
     });
 
     leaflet
@@ -51,7 +48,7 @@ export class FolderPage implements OnInit, OnDestroy {
       .addTo(this.map);
 
     this.marker = leaflet
-      .marker([this.latitude, this.longitude])
+      .marker([lat, long])
       .addTo(this.map)
       .bindPopup('Você está aqui!')
       .openPopup();
@@ -66,27 +63,43 @@ export class FolderPage implements OnInit, OnDestroy {
           return;
         }
 
-        this.latitude = position.coords.latitude;
-        this.longitude = position.coords.longitude;
+        setTimeout(() => {
+          this.initMap(position.coords.latitude, position.coords.longitude);
+          this.loadFriendsLocation();
+        }, 100);
 
-        console.log(`Nova posição: Latitude: ${this.latitude}, Longitude: ${this.longitude}`);
-
-        this.updateMarker();
+        this.locationService.saveLocation(position.coords.latitude, position.coords.longitude).subscribe();
       }
     );
-  }
-
-  updateMarker() {
-    if (this.marker) {
-      this.marker.setLatLng([this.latitude, this.longitude]);
-      this.map.setView([this.latitude, this.longitude], 13);
-    }
   }
 
   stopWatchingPosition() {
     if (this.watchId) {
       Geolocation.clearWatch({ id: this.watchId });
-      console.log('Parando a observação da localização');
+      this.watchId = undefined;
     }
+  }
+
+  async loadFriendsLocation() {
+    this.locationService.getUserFriends().subscribe(async (friends) => {
+      this.friendMarkers.forEach((marker) => {
+        marker.remove();
+      });
+      this.friendMarkers = [];
+
+      for (const friend of friends) {
+        try {
+          const friendLocation = await this.locationService.getLocation(friend.friendUuid).toPromise();
+          const friendMarker = leaflet
+            .marker([friendLocation.latitude, friendLocation.longitude])
+            .addTo(this.map)
+            .bindPopup(`${friendLocation.username}`)
+
+          this.friendMarkers.push(friendMarker);
+        } catch (error) {
+          console.error('Erro ao obter a localização do amigo:', error);
+        }
+      }
+    });
   }
 }
