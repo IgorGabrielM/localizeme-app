@@ -30,5 +30,5 @@ Antes de rodar o projeto, é necessário ter o seguinte instalado:
 1. Clone este repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/localizeme-frontend.git
+git clone https://github.com/IgorGabrielM/localizeme-app.git
 cd localizeme-frontend
