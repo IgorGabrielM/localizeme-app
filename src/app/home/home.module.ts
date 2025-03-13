@@ -1,21 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { IonicModule } from '@ionic/angular';
-import { FriendsPage } from './friends.page';
-import {FriendsPageRoutingModule} from "./friends-routing.module";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+
+
+import { HomePage } from './home.page';
 import {LocationService} from "../../services/location.service";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HomePageRoutingModule} from "./home-routing.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FriendsPageRoutingModule,
+    HomePageRoutingModule,
     HttpClientModule
   ],
-  declarations: [FriendsPage],
+  declarations: [HomePage],
   providers: [LocationService, HttpClient]
 })
-export class FriendsPageModule {}
+export class HomePageModule {}

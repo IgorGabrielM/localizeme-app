@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class LocationService {
-  private baseUrl: string = '';
+  private baseUrl: string = 'http://ip-da-sua-maquina/location';
 
   constructor(private http: HttpClient) {}
 
@@ -28,7 +28,6 @@ export class LocationService {
       friendUuid,
     });
   }
-
 
   getUserFriends(): Observable<any> {
     const uuid = localStorage.getItem('user-uuid');

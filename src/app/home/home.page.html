@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Home</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+<!--
+  <ion-button (click)="setPin()">Obter localização</ion-button>
+-->
+
+  <div *ngIf="mapActivate" class="container-map">
+    <div id="map" style="height: 100%;"></div>
+  </div>
+
+  <div class="container-text">
+    <h1>LocalizeMe</h1>
+    <p>
+      O <strong>LocalizeMe</strong> é um aplicativo simples e intuitivo desenvolvido para uma prova de conceito, permitindo que os usuários compartilhem sua localização em tempo real com seus amigos de maneira fácil e rápida. Através de uma interface amigável, o app oferece uma forma prática de acompanhar onde estão os seus contatos, promovendo maior conectividade e segurança para quem deseja estar sempre perto de quem importa. Ideal para encontros, viagens ou situações em que a localização em tempo real seja necessária, o <strong>LocalizeMe</strong> traz uma solução eficiente e sem complicações.
+    </p>
+  </div>
+</ion-content>
